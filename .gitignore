@@ -1,3 +1,4 @@
 .flatpak-builder
 autom4te.cache
 build-aux
+src/**/*.c
