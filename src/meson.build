@@ -1,6 +1,6 @@
 lahora_sources = [
   'main.vala',
-  'App.vala',
+  'Application.vala',
 ]
 
 lahora_deps = [

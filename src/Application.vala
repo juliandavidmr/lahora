@@ -18,7 +18,7 @@
 
 using Gtk;
 
-public class ApplicationW : Gtk.Window {
+public class ApplicationW : Window {
 
 	Label label_date;
 	private bool modeTimer = false;
@@ -108,6 +108,12 @@ public class ApplicationW : Gtk.Window {
 			return !pause;
 		});
 		timer.attach(loopTimer.get_context());
+		pause = false;
+	}
+
+	public void stopTimer() {
+		pause = true;
+		loopTimer.quit();
 	}
 
 	public ApplicationW () {
@@ -167,11 +173,9 @@ public class ApplicationW : Gtk.Window {
 		play.clicked.connect(() => {
 			if (play.label == "Pause") {
 				play.label = "Play";
-				pause = true;
-				loopTimer.quit();
+				stopTimer();
 			} else { // Play
 				play.label = "Pause";
-				pause = false;
 				startTimer();
 			}
 		});
@@ -180,6 +184,7 @@ public class ApplicationW : Gtk.Window {
 		// Button stop
 		Gtk.Button stop = new Gtk.Button.with_mnemonic("Stop");
 		stop.clicked.connect(() => {
+			stopTimer();
 			tempo = TimerStruct(0, 0, 0, 0);
 		});
 		boxBottom.add(stop);
@@ -192,11 +197,20 @@ public class ApplicationW : Gtk.Window {
 				modeTimer = true;
 				loop.quit();
 				setLabelText("<big>00:00:00</big> <small>000</small>");
+
+				stop.set_sensitive(true);
+				play.set_sensitive(true);
 			} else {
 				modeTimer = false;
 				startTimeLocal();
+
+				stop.set_sensitive(false); // to gray-out
+				play.set_sensitive(false); // to gray-out
 			}
 		});
 		headerbar.add (timerModeCheck);
+
+		stop.set_sensitive(false); // to gray-out
+		play.set_sensitive(false); // to gray-out
 	}
 }
