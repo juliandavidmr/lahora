@@ -55,7 +55,7 @@ public class ApplicationW : Window {
 				label_date.set_text("<span font='22'><b>" + text + "</b></span>");
 			}
 		} else {
-			label_date.set_text("<big>%d:%d:%d</big> <small>%s</small>".printf(
+			label_date.set_text("<span font='22'><b>%d:%d:%d <small>%s</small></b></span>".printf(
 				tempo.hour,
 				tempo.minutes,
 				tempo.seconds,
@@ -63,7 +63,6 @@ public class ApplicationW : Window {
 			));
 		}
 		label_date.set_use_markup (true);
-		label_date.set_line_wrap (true);
 	}
 
 	public void startTimeLocal() {
@@ -158,6 +157,7 @@ public class ApplicationW : Window {
 
 		// The Label:
 		this.label_date = new Gtk.Label("");
+		label_date.set_use_markup (true);
 		box.add (this.label_date);
 
 		// The thread:
@@ -181,13 +181,13 @@ public class ApplicationW : Window {
 		});
 		boxBottom.add(play);
 
-		// Button stop
-		Gtk.Button stop = new Gtk.Button.with_mnemonic("Stop");
-		stop.clicked.connect(() => {
-			stopTimer();
+		// Button reset
+		Gtk.Button reset = new Gtk.Button.with_mnemonic("Reset");
+		reset.clicked.connect(() => {
 			tempo = TimerStruct(0, 0, 0, 0);
+			setLabelText("00:00:00 <small>000</small>");
 		});
-		boxBottom.add(stop);
+		boxBottom.add(reset);
 
 		// CheckButton
 		CheckButton timerModeCheck = new CheckButton.with_label ("Timer");
@@ -196,21 +196,21 @@ public class ApplicationW : Window {
 			if (timerModeCheck.active) {
 				modeTimer = true;
 				loop.quit();
-				setLabelText("<big>00:00:00</big> <small>000</small>");
+				setLabelText("00:00:00 <small>000</small>");
 
-				stop.set_sensitive(true);
+				reset.set_sensitive(true);
 				play.set_sensitive(true);
 			} else {
 				modeTimer = false;
 				startTimeLocal();
 
-				stop.set_sensitive(false); // to gray-out
+				reset.set_sensitive(false); // to gray-out
 				play.set_sensitive(false); // to gray-out
 			}
 		});
 		headerbar.add (timerModeCheck);
 
-		stop.set_sensitive(false); // to gray-out
+		reset.set_sensitive(false); // to gray-out
 		play.set_sensitive(false); // to gray-out
 	}
 }
