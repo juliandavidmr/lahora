@@ -2,3 +2,7 @@
 autom4te.cache
 build-aux
 src/**/*.c
+m4
+*~
+build/
+*.stamp
